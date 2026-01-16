@@ -55,7 +55,7 @@ const account3 = {
 };
 
 const account4 = {
-  owner: '',
+  owner: 'Sarah Smith',
   movements: [430, 1000, 700, 50, 90],
   interestRate: 1,
   pin: 4444,
@@ -86,27 +86,33 @@ const dispMovements = function (mov, moneyType) {
 
 //Testing Area //////////////////////////////////////////////
 
+//dimond warning > this worked first
 const createUsername = function (acc) {
-  acc.userName = acc.owner
+  acc.userName = acc?.owner
     ?.toLowerCase()
     ?.split(' ')
     ?.map((e) => e[0])
     ?.join('');
 };
 
+//dimond warning > this worked first
 const setupAccounts = function (accs) {
   accs.forEach((e) => {
     createUsername(e);
   });
 };
 
+setupAccounts(accounts);
+
+// dimond to upload the current existed balance
 const currentBalance = function (account) {
   const result = account.movements.reduce((a, b) => a + b);
   labelBalance.textContent = `${result}$ `;
 };
 
+// dimond to list income and outcome and intersect
 const summeryAccount = function (acc) {
-  console.log(acc.movements);
+  // console.log(acc.movements);
   if (acc.movements) {
     const income = acc.movements
       .filter((e) => e > 0)
@@ -120,9 +126,13 @@ const summeryAccount = function (acc) {
       .reduce((a, b) => a + b, 0)
       .toFixed(2);
 
-    const intersect = (income * (1.2 / 100)).toFixed(2);
+    const intersect = acc.movements
+      .filter((e) => e > 0)
+      .map((e) => e * (1.2 / 100))
+      .filter((e) => e >= 1)
+      .reduce((ac, cu) => ac + cu);
 
-    labelSumInterest.textContent = `${intersect}$`;
+    labelSumInterest.textContent = `ISIS is here `;
     labelSumIn.textContent = `${income}$`;
     labelSumOut.textContent = `${Math.abs(outcome)}$`;
   } else {
@@ -130,10 +140,59 @@ const summeryAccount = function (acc) {
   }
 };
 
-// WORKINGAREA its just for acc 1
-currentBalance(account2);
-dispMovements(account2, '$');
-summeryAccount(account2);
+// dimond for updating the current account that opened
+const UpdateAccount = function (e) {
+  currentBalance(e);
+  dispMovements(e, '$');
+  summeryAccount(e);
+};
+
+const checkLogin = function () {
+  const res = accounts.find((ac) => ac.userName === inputLoginUsername.value);
+  if (res === undefined) {
+    alert(`You have to enter real username`);
+  } else if (res.pin === Number(inputLoginPin.value)) {
+    UpdateAccount(res);
+    labelWelcome.textContent = `Welcome ${res.owner}`;
+    containerApp.style.animation = 'show 1s linear forwards';
+  } else {
+    alert(`the pin is wrong`);
+  }
+};
+
+btnLogin.addEventListener('click', function (e) {
+  // dimond prevent form from submitting
+  e.preventDefault();
+  checkLogin();
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+// WORKINGAREA its just for testig
+// fixme
+
+currentBalance(account1);
+dispMovements(account1, '$');
+summeryAccount(account1);
+
 // WORKINGAREA
 //
 //
@@ -151,23 +210,8 @@ summeryAccount(account2);
 //
 //
 //
-// Let's go back to Julia and Kate's study about dogs. This time, they want to convert
-// dog ages to human ages and calculate the average age of the dogs in their study.
-// Your tasks:
-
-// Create a function 'calcAverageHumanAge', which accepts an arrays of dog's
-// ages ('ages'), and does the following things in order:
-// 1. Calculate the dog age in human years using the following formula: if the dog is
-// <= 2 years old, humanAge = 2 * dogAge. If the dog is > 2 years old,
-// humanAge = 16 + dogAge * 4
-// 2. Exclude all dogs that are less than 18 human years old (which is the same as
-// keeping dogs that are at least 18 years old)
-// 3. Calculate the average human age of all adult dogs (you should already know
-// from other challenges how we calculate averages 😉)
-// 4. Run the function for both test datasets
-// Test data:
-// § Data 1: [5, 2, 4, 1, 15, 8, 3]
-// § Data 2: [16, 6, 10, 5, 6, 1, 4]
-// GOOD LUCK �
-//
 ////////////TESTINGAREA////////////TESTINGAREA////////////TESTINGAREA///////////
+
+// inputLoginUsername
+// inputLoginPin
+// btnLogin

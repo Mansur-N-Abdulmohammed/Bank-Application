@@ -52,7 +52,7 @@ nav {
   width: 12rem;
   border-radius: 10rem;
   margin-right: 1rem;
-  color: inherit;
+  color: black;
   border: 1px solid #fff;
   transition: all 0.3s;
 }
@@ -94,8 +94,17 @@ nav {
   gap: 2rem;
 
   /* NOTE This creates the fade in/out anumation */
-  /* opacity: 0; */
-  transition: all 1s;
+  /* opacity: 0;
+  pointer-events: none;
+  visibility: collapse; */
+}
+
+@keyframes show {
+  to {
+    opacity: 1;
+    pointer-events: all;
+    visibility: visible;
+  }
 }
 
 .balance {
@@ -135,7 +144,7 @@ nav {
   padding: 2.25rem 4rem;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #eeeeee;
 }
 
 .movements__type {
@@ -200,6 +209,7 @@ nav {
 
 .btn--sort {
   margin-left: auto;
+  color: white;
   border: none;
   background: none;
   font-size: 1.3rem;
