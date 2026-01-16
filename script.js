@@ -171,10 +171,13 @@ btnLogin.addEventListener('click', function (e) {
 //
 //
 //
+console.log('mansur noori');
 //
-//
-//
-//
+/*
+git add .  
+git commit -m "first"
+git push origin main        
+*/
 //
 //
 //
