@@ -31,7 +31,8 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 /////////////////////////////////////////////////
-
+let currentUSER;
+//
 // Data
 const account1 = {
   owner: 'Jonas Schmedtmann',
@@ -104,10 +105,19 @@ const setupAccounts = function (accs) {
 
 setupAccounts(accounts);
 
+// WORKINGAREA WORKINGAREA WORKINGAREA WORKINGAREA WORKINGAREA WORKINGAREA
+// WORKINGAREA WORKINGAREA WORKINGAREA WORKINGAREA WORKINGAREA WORKINGAREA
+// WORKINGAREA WORKINGAREA WORKINGAREA WORKINGAREA WORKINGAREA WORKINGAREA
+// WORKINGAREA WORKINGAREA WORKINGAREA WORKINGAREA WORKINGAREA WORKINGAREA
+const currentUser = function (e) {
+  currentUSER = e;
+};
+
 // dimond to upload the current existed balance
 const currentBalance = function (account) {
   const result = account.movements.reduce((a, b) => a + b);
-  labelBalance.textContent = `${result}$ `;
+  labelBalance.textContent = `${result}$`;
+  return result;
 };
 
 // dimond to list income and outcome and intersect
@@ -128,11 +138,14 @@ const summeryAccount = function (acc) {
 
     const intersect = acc.movements
       .filter((e) => e > 0)
-      .map((e) => e * (1.2 / 100))
+      .map((e) => e * (acc.interestRate / 100))
       .filter((e) => e >= 1)
       .reduce((ac, cu) => ac + cu);
 
-    labelSumInterest.textContent = `ISIS is here `;
+    // bug >> its harrram
+    // labelSumInterest.textContent = `${intersect}$`;
+
+    labelSumInterest.textContent = `ان الحکم الا للە`;
     labelSumIn.textContent = `${income}$`;
     labelSumOut.textContent = `${Math.abs(outcome)}$`;
   } else {
@@ -145,6 +158,16 @@ const UpdateAccount = function (e) {
   currentBalance(e);
   dispMovements(e, '$');
   summeryAccount(e);
+  currentUser(e);
+
+  labelWelcome.textContent = `Welcome Back, ${e.owner.split(' ')[0]}`;
+  containerApp.style.animation = 'show 1s linear forwards';
+
+  // refresh the input field
+  inputLoginUsername.value = inputLoginPin.value = '';
+
+  // solved the problem of outline color
+  inputLoginPin.blur();
 };
 
 const checkLogin = function () {
@@ -153,25 +176,87 @@ const checkLogin = function () {
     alert(`You have to enter real username`);
   } else if (res.pin === Number(inputLoginPin.value)) {
     UpdateAccount(res);
-    labelWelcome.textContent = `Welcome ${res.owner}`;
-    containerApp.style.animation = 'show 1s linear forwards';
   } else {
     alert(`the pin is wrong`);
   }
 };
 
+const transferTo = function () {
+  // console.log(inputTransferTo.value, inputTransferAmount.value);
+
+  let amount = Number(inputTransferAmount.value);
+  let acc = inputTransferTo.value.toLowerCase();
+
+  const rec = accounts.find((e) => e.userName === acc);
+
+  if (acc === rec.userName && amount <= currentBalance(currentUSER)) {
+    currentUSER.movements.push(-amount);
+    rec.movements.push(+amount);
+    UpdateAccount(currentUSER);
+
+    // to clear focus on the input field
+    inputTransferAmount.value = inputTransferTo.value = '';
+    inputTransferAmount.blur();
+    inputTransferTo.blur();
+  } else {
+    alert('you dont have that money ' + typeof amount);
+  }
+};
+
+const requestLoad = function () {
+  const loanNum = Number(inputLoanAmount.value);
+  if (loanNum > 0 && loanNum <= 10000) {
+    currentUSER.movements.push(loanNum);
+    if (!currentUSER.Borrowing) {
+      currentUSER.Borrowing = 0;
+    }
+    currentUSER.Borrowing += loanNum;
+    console.log(currentUSER);
+    UpdateAccount(currentUSER);
+  } else {
+    alert(`you cant get loan`);
+  }
+};
+
+// WORKINGAREA WORKINGAREA WORKINGAREA WORKINGAREA WORKINGAREA WORKINGAREA
+// WORKINGAREA WORKINGAREA WORKINGAREA WORKINGAREA WORKINGAREA WORKINGAREA
+// WORKINGAREA WORKINGAREA WORKINGAREA WORKINGAREA WORKINGAREA WORKINGAREA
+// WORKINGAREA WORKINGAREA WORKINGAREA WORKINGAREA WORKINGAREA WORKINGAREA
+
+// BTNS, BTNS, BTNS, BTNS, BTNS
+// BTNS, BTNS, BTNS, BTNS, BTNS
+// BTNS, BTNS, BTNS, BTNS, BTNS
+// BTNS, BTNS, BTNS, BTNS, BTNS
+// BTNS, BTNS, BTNS, BTNS, BTNS
+// BTNS, BTNS, BTNS, BTNS, BTNS
+
 btnLogin.addEventListener('click', function (e) {
   // dimond prevent form from submitting
   e.preventDefault();
+  // start here warning
   checkLogin();
 });
+
+btnTransfer.addEventListener('click', function (e) {
+  // dimond prevent form from submitting
+  e.preventDefault();
+  // start here warning
+  transferTo();
+});
+
+btnLoan.addEventListener('click', function (e) {
+  // dimond prevent form from submitting
+  e.preventDefault();
+  // start here warning
+  requestLoad();
+});
+
 //
 //
 //
 //
 //
 //
-console.log('mansur noori');
 //
 /*
 git add .  
@@ -183,38 +268,10 @@ git push origin main
 //
 //
 //
+UpdateAccount(account1);
 //
 //
 //
 //
 //
 //
-// WORKINGAREA its just for testig
-// fixme
-
-currentBalance(account1);
-dispMovements(account1, '$');
-summeryAccount(account1);
-
-// WORKINGAREA
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-////////////TESTINGAREA////////////TESTINGAREA////////////TESTINGAREA///////////
-
-// inputLoginUsername
-// inputLoginPin
-// btnLogin
