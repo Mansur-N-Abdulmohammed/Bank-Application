@@ -92,13 +92,13 @@ const createUsername = function (acc) {
   acc.userName = acc?.owner
     ?.toLowerCase()
     ?.split(' ')
-    ?.map((e) => e[0])
+    ?.map(e => e[0])
     ?.join('');
 };
 
 //dimond warning > this worked first
 const setupAccounts = function (accs) {
-  accs.forEach((e) => {
+  accs.forEach(e => {
     createUsername(e);
   });
 };
@@ -125,21 +125,21 @@ const summeryAccount = function (acc) {
   // console.log(acc.movements);
   if (acc.movements) {
     const income = acc.movements
-      .filter((e) => e > 0)
-      .map((e) => e * 1)
+      .filter(e => e > 0)
+      .map(e => e * 1)
       .reduce((a, b) => a + b, 0)
       .toFixed(2);
 
     const outcome = acc.movements
-      .filter((e) => e < 0)
-      .map((e) => e * 1)
+      .filter(e => e < 0)
+      .map(e => e * 1)
       .reduce((a, b) => a + b, 0)
       .toFixed(2);
 
     const intersect = acc.movements
-      .filter((e) => e > 0)
-      .map((e) => e * (acc.interestRate / 100))
-      .filter((e) => e >= 1)
+      .filter(e => e > 0)
+      .map(e => e * (acc.interestRate / 100))
+      .filter(e => e >= 1)
       .reduce((ac, cu) => ac + cu);
 
     // bug >> its harrram
@@ -171,7 +171,7 @@ const UpdateAccount = function (e) {
 };
 
 const checkLogin = function () {
-  const res = accounts.find((ac) => ac.userName === inputLoginUsername.value);
+  const res = accounts.find(ac => ac.userName === inputLoginUsername.value);
   if (res === undefined) {
     alert(`You have to enter real username`);
   } else if (res.pin === Number(inputLoginPin.value)) {
@@ -187,7 +187,7 @@ const transferTo = function () {
   let amount = Number(inputTransferAmount.value);
   let acc = inputTransferTo.value.toLowerCase();
 
-  const rec = accounts.find((e) => e.userName === acc);
+  const rec = accounts.find(e => e.userName === acc);
 
   if (acc === rec.userName && amount <= currentBalance(currentUSER)) {
     currentUSER.movements.push(-amount);
@@ -275,3 +275,4 @@ UpdateAccount(account1);
 //
 //
 //
+// /////////////////////////////////////////// testingarea
