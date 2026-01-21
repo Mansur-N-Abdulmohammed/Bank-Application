@@ -40,6 +40,7 @@ const account1 = {
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
   interestRate: 1.2, // %
   pin: 1111,
+  type: 'premium',
 };
 
 const account2 = {
@@ -47,13 +48,15 @@ const account2 = {
   movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
   interestRate: 1.5,
   pin: 2222,
+  type: 'basic',
 };
 
 const account3 = {
   owner: 'Steven Thomas Williams',
-  movements: [200, -200, 340, -300, -20, 50, 400, -460],
+  movements: [],
   interestRate: 0.7,
   pin: 3333,
+  type: 'standard',
 };
 
 const account4 = {
@@ -61,6 +64,7 @@ const account4 = {
   movements: [430, 1000, 700, 50, 90],
   interestRate: 1,
   pin: 4444,
+  type: 'premium',
 };
 
 const accounts = [account1, account2, account3, account4];
@@ -150,7 +154,7 @@ const summeryAccount = function (acc) {
     // bug >> its harrram
     // labelSumInterest.textContent = `${intersect}$`;
 
-    labelSumInterest.textContent = `ان الحکم الا للە`;
+    labelSumInterest.textContent = `ولا تقرب الربا`;
     labelSumIn.textContent = `${income}$`;
     labelSumOut.textContent = `${Math.abs(outcome)}$`;
   } else {
@@ -166,7 +170,7 @@ const UpdateAccount = function (e) {
   currentUser(e);
 
   labelWelcome.textContent = `Welcome Back, ${e.owner.split(' ')[0]}`;
-  containerApp.style.animation = 'show 1s linear forwards';
+  containerApp.style.animation = 'show .5s linear forwards';
 
   // refresh the input field
   inputLoginUsername.value = inputLoginPin.value = '';
@@ -216,8 +220,8 @@ const requestLoad = function () {
       currentUSER.Borrowing = 0;
     }
     currentUSER.Borrowing += loanNum;
-    console.log(currentUSER);
     UpdateAccount(currentUSER);
+    inputLoanAmount.value = '';
   } else {
     alert(`you cant get loan`);
   }
@@ -256,6 +260,12 @@ btnLoan.addEventListener('click', function (e) {
   requestLoad();
 });
 
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  currentSorted = !currentSorted;
+  dispMovements(currentUSER.movements, currentSorted);
+});
+
 //
 //
 //
@@ -272,7 +282,6 @@ git push origin main
 //
 //
 //
-//
 UpdateAccount(account1);
 //
 //
@@ -280,10 +289,5 @@ UpdateAccount(account1);
 //
 //
 //
+//
 // /////////////////////////////////////////// testingarea
-
-btnSort.addEventListener('click', function (e) {
-  e.preventDefault();
-  currentSorted = !currentSorted;
-  dispMovements(currentUSER.movements, currentSorted);
-});
