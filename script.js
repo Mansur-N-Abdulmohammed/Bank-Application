@@ -276,3 +276,8 @@ UpdateAccount(account1);
 //
 //
 // /////////////////////////////////////////// testingarea
+
+const arr = [6, 4, 2, 3, 5, 1];
+console.log(arr);
+const arr2 = [...arr].sort((a, b) => b - a);
+console.log(arr2);
