@@ -291,3 +291,13 @@ UpdateAccount(account1);
 //
 //
 // /////////////////////////////////////////// testingarea
+const users = [
+  { name: 'Ali', role: 'admin' },
+  { name: 'Sara', role: 'user' },
+  { name: 'Omar', role: 'user' },
+  { name: 'Lina', role: 'admin' },
+  { name: 'Yusuf', role: 'guest' },
+];
+
+// const keys = Object.groupBy(users, e => e.role);
+// console.log(keys);
