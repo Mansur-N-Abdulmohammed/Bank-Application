@@ -32,6 +32,7 @@ const inputClosePin = document.querySelector('.form__input--pin');
 
 /////////////////////////////////////////////////
 let currentUSER;
+let currentSorted = false;
 //
 // Data
 const account1 = {
@@ -64,10 +65,14 @@ const account4 = {
 
 const accounts = [account1, account2, account3, account4];
 
-const dispMovements = function (mov, moneyType) {
+const dispMovements = function (mov, sort = false) {
   containerMovements.innerHTML = '';
 
-  mov.movements.forEach(function (e, i, arr) {
+  const usage = [...mov];
+  if (sort === true) {
+    usage.sort((a, b) => a - b);
+  }
+  usage.forEach(function (e, i, arr) {
     let type = e > 0 ? `deposit` : 'withdrawal';
 
     const html = `
@@ -75,7 +80,7 @@ const dispMovements = function (mov, moneyType) {
         <div class="movements__type movements__type--${type}">
         ${i + 1} ${type}</div>
          <div class="movements__date">3 days ago</div>
-         <div class="movements__value">${Math.abs(e)}${moneyType}</div>
+         <div class="movements__value">${Math.abs(e)}</div>
          </div>
          `;
 
@@ -156,7 +161,7 @@ const summeryAccount = function (acc) {
 // dimond for updating the current account that opened
 const UpdateAccount = function (e) {
   currentBalance(e);
-  dispMovements(e, '$');
+  dispMovements(e.movements, '$');
   summeryAccount(e);
   currentUser(e);
 
@@ -277,7 +282,8 @@ UpdateAccount(account1);
 //
 // /////////////////////////////////////////// testingarea
 
-const arr = [6, 4, 2, 3, 5, 1];
-console.log(arr);
-const arr2 = [...arr].sort((a, b) => b - a);
-console.log(arr2);
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  currentSorted = !currentSorted;
+  dispMovements(currentUSER.movements, currentSorted);
+});
