@@ -41,11 +41,8 @@ const account10 = {
 const now = new Date();
 const hour = now.getHours();
 const min = now.getMinutes();
-const day = now.getDate();
-const month = new Intl.DateTimeFormat('en-us', {
-  timeZone: 'Asia/Baghdad',
-  month: 'long',
-}).format(now);
+const day = `${now.getDate()}`.padStart(2, '0');
+const month = `${now.getMonth()}`.padStart(2, '0');
 
 const year = now.getFullYear();
 
