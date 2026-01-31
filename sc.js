@@ -37,13 +37,3 @@ const account10 = {
   currency: 'USD',
   locale: 'en-US',
 };
-
-const now = new Date();
-const hour = now.getHours();
-const min = now.getMinutes();
-const day = `${now.getDate()}`.padStart(2, '0');
-const month = `${now.getMonth()}`.padStart(2, '0');
-
-const year = now.getFullYear();
-
-labelDate.textContent = `${day}/${month}/${year}  ${hour}:${min}`;
