@@ -32,7 +32,7 @@ const inputClosePin = document.querySelector('.form__input--pin');
 
 /////////////////////////////////////////////////
 let currentUSER;
-let currentSorted = false;
+let SortedMovement = false;
 
 const account1 = {
   owner: 'Jonas Schmedtmann',
@@ -104,10 +104,15 @@ const account4 = {
 
 const accounts = [account1, account2, account3, account4];
 
-const obj = account4.movements.map((e, i) => {
-  return { movement: e, date: account1.movementsDates[i] };
-});
-
-console.log(obj);
-console.log(obj.toSorted((a, b) => a.movement - b.movement));
-// console.log(obj);
+// dimond for creating userName for every account
+const createUsername = accs => {
+  accs.forEach((e, i) => {
+    accs[i].userName = e.owner
+      .toLowerCase()
+      .split(' ')
+      .map(e => e[0])
+      .join('');
+  });
+};
+createUsername(accounts);
+// //////////////////////////////////////////////////////////////////
