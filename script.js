@@ -51,7 +51,7 @@ const account1 = {
     '2020-07-12T10:51:36.790Z',
   ],
   currency: 'EUR',
-  locale: 'pt-PT', // de-DE
+  locale: 'de-DE', // de-DE
 };
 
 const account2 = {
@@ -105,7 +105,7 @@ const account4 = {
 const accounts = [account1, account2, account3, account4];
 
 // dimond for creating userName for every account
-const createUsername = accs => {
+const createUsername = function (accs) {
   accs.forEach((e, i) => {
     accs[i].userName = e.owner
       .toLowerCase()
@@ -116,3 +116,73 @@ const createUsername = accs => {
 };
 createUsername(accounts);
 // //////////////////////////////////////////////////////////////////
+// dimond to get the current Balance
+const currentBalance = function (acc) {
+  const res = acc.movements.reduce((a, b) => a + b, 0);
+  labelBalance.textContent = new Intl.NumberFormat(acc.local, {
+    style: 'currency',
+    currency: acc.currency,
+  }).format(res);
+};
+// dimond to show the movements
+const displayMovement = function (acc) {
+  const combinedMovementDates = acc.movements.map((e, i) => ({
+    mov: e,
+    movDate: acc.movementsDates[i],
+  }));
+
+  if (SortedMovement) combinedMovementDates.sort((a, b) => a.mov - b.mov);
+  combinedMovementDates.forEach((e, i) => {
+    const type = e.mov > 0 ? 'deposit' : 'withdrawal';
+
+    // trick
+    const el = new Intl.NumberFormat('en-us', {
+      style: 'currency',
+      currency: 'EUR',
+    }).format(Math.abs(e.mov));
+    // trick
+    const formatedDate = new Intl.DateTimeFormat(acc.local, {
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+    }).format(new Date(e.movDate));
+
+    const html = `
+    <div class="movements__row">
+          <div class="movements__type movements__type--${type}">${type}</div>
+          <div class="movements__date">${formatedDate}</div>
+          <div class="movements__value">${el}</div>
+        </div>
+        `;
+    containerMovements.insertAdjacentHTML('afterbegin', html);
+  });
+};
+
+// testingarea fake
+
+const updateUI = function (acc) {
+  displayMovement(account1);
+  currentBalance(account1);
+
+  currentUSER = acc.userName;
+};
+
+// workingArea
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  SortedMovement = !SortedMovement;
+  updateUI(currentUSER);
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+updateUI(account1);
