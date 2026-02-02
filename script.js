@@ -105,7 +105,6 @@ const account4 = {
 const accounts = [account1, account2, account3, account4];
 
 // dimond for creating userName for every account
-
 accounts.forEach((e, i) => {
   accounts[i].userName = e.owner
     .toLowerCase()
@@ -115,6 +114,25 @@ accounts.forEach((e, i) => {
 });
 
 // //////////////////////////////////////////////////////////////////
+// dimond to calcTimeOut
+// const calcTimeOut = function () {
+//   const time = 10 * 60;
+//   const getStart = setInterval(()=>{
+
+//   },1000)
+// };
+// dimond for delete the account
+const deleteAccount = function () {
+  const userName = inputCloseUsername.value;
+  const pin = +inputClosePin.value;
+  const acc = accounts.find(e => e.userName === userName);
+  if (acc && currentUSER.userName && userName && currentUSER.pin === pin) {
+    const ind = accounts.findIndex(e => e.userName === userName);
+    accounts.splice(ind, 1);
+    containerApp.style.animation = 'none';
+    inputCloseUsername.value = inputClosePin.value = '';
+  }
+};
 //dimond for check if the user is correct or not
 const LoginCheck = function () {
   const userName = inputLoginUsername.value.toLowerCase();
@@ -134,6 +152,41 @@ const LoginCheck = function () {
     alert(`the username is wrong`);
   }
   inputLoginUsername.value = inputLoginPin.value = '';
+};
+// dimond t oget getLoan
+const getLoan = function () {
+  const amount = +inputLoanAmount.value;
+  const largest = Math.max(...currentUSER.movements.filter(e => e > 0));
+  if (amount > 0 && amount <= 0.1 * largest) {
+    setTimeout(() => {
+      currentUSER.loanMovement ??= [];
+      currentUSER.loanMovement.push(amount);
+      currentUSER.movements.push(amount);
+      currentUSER.movementsDates.push(new Date().toISOString());
+      updateUI(currentUSER);
+      console.log(currentUSER);
+    }, 2000);
+  }
+};
+//dimond to transmit money
+const transferMoney = function () {
+  const rec = inputTransferTo.value.toLowerCase();
+  const amount = +inputTransferAmount.value;
+
+  const accept = accounts.find(
+    e => e.userName === rec && e.userName !== currentUSER.userName,
+  );
+
+  if (amount <= currentBalance(currentUSER) && amount > 0 && accept) {
+    // you will get a bug if you dont consider the date of movements
+    accept?.movements.push(+Number(amount));
+    accept?.movementsDates.push(new Date().toISOString());
+    currentUSER?.movements.push(-Number(amount));
+    currentUSER?.movementsDates.push(new Date().toISOString());
+    console.log(currentUSER);
+    updateUI(currentUSER);
+    inputTransferTo.value = inputTransferAmount.value = '';
+  }
 };
 // dimond to show the money due to the account
 const CalcCurrency = function (mon, acc) {
@@ -160,6 +213,7 @@ const currentBalance = function (acc) {
     style: 'currency',
     currency: acc.currency,
   }).format(res);
+  return res;
 };
 // dimond to show the movements
 const displayMovement = function (acc) {
@@ -178,7 +232,7 @@ const displayMovement = function (acc) {
       currency: acc.currency,
     }).format(Math.abs(e.mov));
     // trick
-    const formatedDate = new Intl.DateTimeFormat(acc.locale, {
+    const formatedDate = new Intl.DateTimeFormat('en-uk', {
       year: 'numeric',
       month: 'numeric',
       day: 'numeric',
@@ -195,26 +249,38 @@ const displayMovement = function (acc) {
   });
 };
 
-// testingarea fake
-
 const updateUI = function (acc) {
   displayMovement(acc);
   currentBalance(acc);
   displaySummery(acc);
+  // calcTimeOut();
   currentUSER = acc;
   // currentUSER = acc.useName bug;
 };
 
-// workingArea
+// workingarea
 btnSort.addEventListener('click', function (e) {
   e.preventDefault();
   SortedMovement = !SortedMovement;
   updateUI(currentUSER);
 });
-
+// workingarea
 btnLogin.addEventListener('click', function (e) {
   e.preventDefault();
   LoginCheck();
+});
+// workingarea
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+  transferMoney();
+});
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+  getLoan();
+});
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+  deleteAccount();
 });
 
 //
@@ -228,5 +294,5 @@ btnLogin.addEventListener('click', function (e) {
 //
 //
 //
-//
+// testingarea fake
 updateUI(account1);

@@ -103,9 +103,9 @@ nav {
   gap: 2rem;
 
   /* NOTE This creates the fade in/out anumation */
-  /* opacity: 0;
+  opacity: 0;
   pointer-events: none;
-  visibility: collapse; */
+  visibility: collapse;
 }
 
 @keyframes show {
@@ -174,11 +174,11 @@ nav {
 }
 
 .movements__type--deposit {
-  background-image: linear-gradient(to top left, #39b385, #387800);
+  background-image: linear-gradient(to top left, #39b385, #00ffe1);
 }
 
 .movements__type--withdrawal {
-  background-image: linear-gradient(to top left, #e52a5a, #ff585f);
+  background-image: linear-gradient(to top left, #ff00fb, #ffa358);
 }
 
 .movements__value {
