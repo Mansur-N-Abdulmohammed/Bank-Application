@@ -105,21 +105,58 @@ const account4 = {
 const accounts = [account1, account2, account3, account4];
 
 // dimond for creating userName for every account
-const createUsername = function (accs) {
-  accs.forEach((e, i) => {
-    accs[i].userName = e.owner
-      .toLowerCase()
-      .split(' ')
-      .map(e => e[0])
-      .join('');
-  });
-};
-createUsername(accounts);
+
+accounts.forEach((e, i) => {
+  accounts[i].userName = e.owner
+    .toLowerCase()
+    .split(' ')
+    .map(e => e[0])
+    .join('');
+});
+
 // //////////////////////////////////////////////////////////////////
+//dimond for check if the user is correct or not
+const LoginCheck = function () {
+  const userName = inputLoginUsername.value.toLowerCase();
+  const pin = +inputLoginPin.value;
+
+  const check = accounts.find(e => e.userName === userName);
+
+  if (check) {
+    if (check.pin === pin) {
+      containerApp.style.animation = 'show 0.5s ease forwards';
+      labelWelcome.textContent = `welcome back, ${check.owner.split(' ')[0]}`;
+      updateUI(check);
+    } else {
+      alert(`the password is wrong`);
+    }
+  } else {
+    alert(`the username is wrong`);
+  }
+  inputLoginUsername.value = inputLoginPin.value = '';
+};
+// dimond to show the money due to the account
+const CalcCurrency = function (mon, acc) {
+  const res = new Intl.NumberFormat(acc.locale, {
+    style: 'currency',
+    currency: acc.currency,
+  }).format(Math.abs(mon));
+  return res;
+};
+// dimond toshow the summery
+const displaySummery = function (acc) {
+  const income = acc.movements.filter(e => e > 0).reduce((a, b) => a + b, 0);
+  const outcome = acc.movements.filter(e => e < 0).reduce((a, b) => a + b, 0);
+
+  labelSumIn.textContent = CalcCurrency(income, acc);
+  labelSumOut.textContent = CalcCurrency(outcome, acc);
+  // labelSumInterest
+};
+
 // dimond to get the current Balance
 const currentBalance = function (acc) {
   const res = acc.movements.reduce((a, b) => a + b, 0);
-  labelBalance.textContent = new Intl.NumberFormat(acc.local, {
+  labelBalance.textContent = new Intl.NumberFormat(acc.locale, {
     style: 'currency',
     currency: acc.currency,
   }).format(res);
@@ -136,12 +173,12 @@ const displayMovement = function (acc) {
     const type = e.mov > 0 ? 'deposit' : 'withdrawal';
 
     // trick
-    const el = new Intl.NumberFormat('en-us', {
+    const el = new Intl.NumberFormat(acc.locale, {
       style: 'currency',
-      currency: 'EUR',
+      currency: acc.currency,
     }).format(Math.abs(e.mov));
     // trick
-    const formatedDate = new Intl.DateTimeFormat(acc.local, {
+    const formatedDate = new Intl.DateTimeFormat(acc.locale, {
       year: 'numeric',
       month: 'numeric',
       day: 'numeric',
@@ -161,10 +198,11 @@ const displayMovement = function (acc) {
 // testingarea fake
 
 const updateUI = function (acc) {
-  displayMovement(account1);
-  currentBalance(account1);
-
-  currentUSER = acc.userName;
+  displayMovement(acc);
+  currentBalance(acc);
+  displaySummery(acc);
+  currentUSER = acc;
+  // currentUSER = acc.useName bug;
 };
 
 // workingArea
@@ -173,6 +211,12 @@ btnSort.addEventListener('click', function (e) {
   SortedMovement = !SortedMovement;
   updateUI(currentUSER);
 });
+
+btnLogin.addEventListener('click', function (e) {
+  e.preventDefault();
+  LoginCheck();
+});
+
 //
 //
 //
