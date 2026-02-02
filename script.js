@@ -33,6 +33,7 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 let currentUSER;
 let SortedMovement = false;
+let currentTimeout;
 
 const account1 = {
   owner: 'Jonas Schmedtmann',
@@ -115,12 +116,21 @@ accounts.forEach((e, i) => {
 
 // //////////////////////////////////////////////////////////////////
 // dimond to calcTimeOut
-// const calcTimeOut = function () {
-//   const time = 10 * 60;
-//   const getStart = setInterval(()=>{
-
-//   },1000)
-// };
+const calcTimeOut = function () {
+  let time = 10 * 60;
+  currentTimeout = setInterval(() => {
+    if (time === 0) {
+      clearInterval(currentTimeout);
+      containerApp.style.animation = 'none';
+      window.location.reload();
+    }
+    const min = Math.floor(time / 60);
+    const second = time % 60;
+    labelTimer.textContent = `${min}:${second.toString().padStart(2, '0')}`;
+    time--;
+    // console.log(`${min}:${second.toString().padStart(2, '0')}`);
+  }, 1000);
+};
 // dimond for delete the account
 const deleteAccount = function () {
   const userName = inputCloseUsername.value;
@@ -137,14 +147,18 @@ const deleteAccount = function () {
 const LoginCheck = function () {
   const userName = inputLoginUsername.value.toLowerCase();
   const pin = +inputLoginPin.value;
-
   const check = accounts.find(e => e.userName === userName);
 
   if (check) {
     if (check.pin === pin) {
       containerApp.style.animation = 'show 0.5s ease forwards';
-      labelWelcome.textContent = `welcome back, ${check.owner.split(' ')[0]}`;
       updateUI(check);
+      labelWelcome.textContent = `welcome back, ${check.owner.split(' ')[0]}`;
+      labelDate.textContent = new Intl.DateTimeFormat('en-uk', {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+      }).format(new Date());
     } else {
       alert(`the password is wrong`);
     }
@@ -164,7 +178,6 @@ const getLoan = function () {
       currentUSER.movements.push(amount);
       currentUSER.movementsDates.push(new Date().toISOString());
       updateUI(currentUSER);
-      console.log(currentUSER);
     }, 2000);
   }
 };
@@ -183,7 +196,6 @@ const transferMoney = function () {
     accept?.movementsDates.push(new Date().toISOString());
     currentUSER?.movements.push(-Number(amount));
     currentUSER?.movementsDates.push(new Date().toISOString());
-    console.log(currentUSER);
     updateUI(currentUSER);
     inputTransferTo.value = inputTransferAmount.value = '';
   }
@@ -217,6 +229,7 @@ const currentBalance = function (acc) {
 };
 // dimond to show the movements
 const displayMovement = function (acc) {
+  containerMovements.innerHTML = '';
   const combinedMovementDates = acc.movements.map((e, i) => ({
     mov: e,
     movDate: acc.movementsDates[i],
@@ -253,7 +266,10 @@ const updateUI = function (acc) {
   displayMovement(acc);
   currentBalance(acc);
   displaySummery(acc);
-  // calcTimeOut();
+
+  // the first is to delete the last one
+  clearInterval(currentTimeout);
+  calcTimeOut();
   currentUSER = acc;
   // currentUSER = acc.useName bug;
 };
@@ -295,4 +311,4 @@ btnClose.addEventListener('click', function (e) {
 //
 //
 // testingarea fake
-updateUI(account1);
+// updateUI(account1);
