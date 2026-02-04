@@ -210,8 +210,10 @@ const CalcCurrency = function (mon, acc) {
 };
 // dimond toshow the summery
 const displaySummery = function (acc) {
-  const income = acc.movements.filter(e => e > 0).reduce((a, b) => a + b, 0);
-  const outcome = acc.movements.filter(e => e < 0).reduce((a, b) => a + b, 0);
+  const income = acc?.movements?.filter(e => e > 0)?.reduce((a, b) => a + b, 0);
+  const outcome = acc?.movements
+    ?.filter(e => e < 0)
+    ?.reduce((a, b) => a + b, 0);
 
   labelSumIn.textContent = CalcCurrency(income, acc);
   labelSumOut.textContent = CalcCurrency(outcome, acc);
@@ -298,17 +300,3 @@ btnClose.addEventListener('click', function (e) {
   e.preventDefault();
   deleteAccount();
 });
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-// testingarea fake
-// updateUI(account1);
