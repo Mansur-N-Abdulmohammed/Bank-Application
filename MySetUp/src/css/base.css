@@ -1,0 +1,10 @@
+/* GENERAL */
+@import url();
+/* LAYOUT */
+@import url();
+/* COMPONENT */
+@import url();
+/* VARIABLE */
+@import url();
+
+/* To make a responsive website you have top set the medias inside the selector itself and the breakpoint after the design wint be possible  */
